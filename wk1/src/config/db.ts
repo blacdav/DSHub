@@ -6,6 +6,6 @@ export default {
     password: dbConfig.password,
     database: dbConfig.name,
     host: dbConfig.host,
-    dialect: dbConfig.dialect,
+    dialect: dbConfig.dialect
     // }
 }
