@@ -10,3 +10,13 @@ export const dbConfig: DBConfig = {
     port: parseInt(process.env.DB_PORT!),
     dialect: "mysql"
 };
+
+if (!process.env.JWT_ACCESS_SECRET || !process.env.JWT_REFRESH_SECRET || !process.env.JWT_RESET_SECRET) {
+  throw new Error("JWT secrets are not set in environment variables.");
+};
+
+export const tokenConfig = {
+    reset: process.env.JWT_RESET_SECRET,
+    refresh: process.env.JWT_REFRESH_SECRET,
+    access: process.env.JWT_ACCESS_SECRET
+};
