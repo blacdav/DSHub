@@ -10,9 +10,9 @@ class User extends Model {
     declare password: string;
     declare email: string;
     declare role: string;
-    declare otp: string;
-    declare token: string;
-    declare otp_expires: Date;
+    declare otp: string | null;
+    declare token: string | null;
+    declare otp_expires: Date | null;
     declare is_verified: boolean;
 
     static associate(models: Models) {
@@ -74,9 +74,9 @@ User.init({
         }
     },
     role: {
-        type: DataTypes.ENUM("admin", "user"),
+        type: DataTypes.ENUM("admin", "farmer"),
         allowNull: false,
-        defaultValue: "user"
+        defaultValue: "farmer"
     },
     is_verified: {
         type: DataTypes.BOOLEAN,
@@ -94,7 +94,7 @@ User.init({
             const password_hash = await hash(user.password);
             user.password = password_hash;
 
-            const otp_hash = await hash(user.otp);
+            const otp_hash = await hash(user.otp!);
             user.otp = otp_hash;
 
             if (user.email === 'daviddavidaniefiok@gmail.com') {
@@ -108,7 +108,7 @@ User.init({
             }
 
             if (user.changed('otp') && options.fields?.includes('otp')) {
-                const otp_hash = await hash(user.otp);
+                const otp_hash = await hash(user.otp!);
                 user.otp = otp_hash;
             }
         }

@@ -1,5 +1,7 @@
 import { RequestHandler } from "express";
-import RefreshToken from "../../models/refresh-token.model.js";
+import models from "../../models";
+
+const { RefreshToken } = models;
 
 export const SignOut: RequestHandler = async (req, res, next) => {
   const refresh_token = req.cookies.refresh_token || req.body.refresh_token;

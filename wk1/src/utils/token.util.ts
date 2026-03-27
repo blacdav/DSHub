@@ -1,10 +1,9 @@
 import {SignJWT, jwtVerify} from "jose"
 import { tokenConfig } from "../config/index";
-// import RefreshToken from "../models/refresh-token.model.js";
 import models from "../models";
 import User from "../models/users.model";
 
-const {} = models
+const { RefreshToken } = models
 
 const access = new TextEncoder().encode(tokenConfig.access);
 const refresh = new TextEncoder().encode(tokenConfig.refresh);

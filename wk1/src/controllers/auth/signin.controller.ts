@@ -1,7 +1,7 @@
 import { RequestHandler } from "express";
 import models from "../../models/index";
-import { GenAccessToken, GenRefreshToken } from "../../utils/token.util.js";
 import { verifyHash } from "../../utils/hash.util";
+import { GenAccessToken, GenRefreshToken } from "../../utils/token.util";
 
 const { User } = models;
 
@@ -36,19 +36,17 @@ export const SignIn: RequestHandler = async (req, res) => {
 
         const access_token = GenAccessToken(user);
 
-        // here, i'm to update either the refresh or accesss token in the database
-
         if (req.headers["x-client-type"] === "web") {
             res.cookie("access_token", access_token, {
                 httpOnly: true,
-                secure: false, // would change to true b4 prod
-                sameSite: "strict"
+                secure: process.env.NODE_ENV === "production" ? true : false,
+                sameSite: "lax"
             })
 
             res.cookie("refresh_token", refresh_token, {
                 httpOnly: true,
-                secure: false, // would change to true b4 prod
-                sameSite: "strict"
+                secure: process.env.NODE_ENV === "production" ? true : false,
+                sameSite: "lax"
             })
 
             return res.status(200).json({

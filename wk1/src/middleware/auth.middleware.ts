@@ -1,8 +1,8 @@
-// import jwt from "jsonwebtoken";
 import { RequestHandler } from "express";
-import { tokenConfig } from "../config/index.js";
+import { VerifyAccessToken } from "../utils/token.util";
+import { AuthUser } from "../dto/auth.dto";
 
-export const CheckAuthUser: RequestHandler = (req, res, next) => {
+export const CheckAuthUser: RequestHandler = async (req, res, next) => {
     try {
         let token;
         if (req.headers["x-client-type"] === "web") {
@@ -18,14 +18,14 @@ export const CheckAuthUser: RequestHandler = (req, res, next) => {
             })
         }
 
-        const decoded = jwt.verify(token, tokenConfig.access);
+        const decoded = await VerifyAccessToken(token);
         if (!decoded || typeof decoded !== "object") {
             return res.status(401).json({
                 success: false,
                 message: "Unauthorized"
             });
         }
-        req.user = decoded;
+        req.user = decoded as AuthUser;
 
         return next();
     } catch (err) {

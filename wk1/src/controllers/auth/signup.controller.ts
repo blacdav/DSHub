@@ -1,9 +1,9 @@
 import { RequestHandler } from 'express';
-import { Otp } from "../../utils/otp.js";
-import { otpEmail } from '../../utils/otpEmail.util';
+import models from '../../models/index';
+import { sequelized } from '../../db/index';
+import { Otp } from '../../utils/otp';
+import { Email } from '../../utils/send-email.util';
 import { GenAccessToken } from '../../utils/token.util';
-import models from "../../models/index"
-import { sequelized } from '../../db/index.js';
 
 const { User } = models;
 
@@ -47,12 +47,7 @@ export const SignUp: RequestHandler = async (req, res) => {
             });
         }
 
-        await otpEmail(
-            user.first_name,
-            Number(newOtp.code),
-            email,
-            "../emails/user_verification.html"
-        )
+        await Email(user, newOtp.code.toString(), email, "../emails/user_verification.html")
 
         const access_token = GenAccessToken(user);
 

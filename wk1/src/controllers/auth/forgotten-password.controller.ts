@@ -2,6 +2,7 @@ import { RequestHandler } from "express";
 import models from "../../models/index";
 import { hash } from "../../utils/hash.util";
 import { Otp } from "../../utils/otp";
+import { Email } from "../../utils/send-email.util";
 
 const { User } = models;
 
@@ -24,12 +25,7 @@ export const ForgottenPassword: RequestHandler = async (req, res) => {
         user.otp_expires = new Date(Date.now() + 5 * 60 * 1000);
         user.save();
 
-        await otpEmail(
-            user.first_name + " " + user.last_name,
-            newOtp.code.toString(),
-            email,
-            "../emails/user_verification.html"
-        );
+        await Email(user, newOtp.code.toString(), email, "../emails/user_verification.html");
 
         return res.status(200).json({
             success: true,

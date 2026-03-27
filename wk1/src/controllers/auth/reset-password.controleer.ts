@@ -4,8 +4,7 @@ import models from "../../models";
 const { User } = models;
 
 export const ResetPassword: RequestHandler = async (req, res) => {
-    const { reset_token } = req.params;
-    const { new_password } = req.body;
+    const { reset_token, new_password } = req.body;
 
     try {
         if (!new_password || new_password.trim() === "") {
@@ -13,8 +12,6 @@ export const ResetPassword: RequestHandler = async (req, res) => {
         }
 
         let profile = await User.findOne({ where: { reset_token }});
-
-        // const passwordHash = await Hash(new_password);
 
         if (!profile) {
             return res.status(404).json({ message: "User not found" });

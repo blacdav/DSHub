@@ -1,7 +1,9 @@
-import { Otp } from "../../utils/otp.js";
-import User from "../../models/users.model.js";
-import { otpEmail } from "../../utils/otpEmail.util.js";
 import { RequestHandler } from "express";
+import models from "../../models";
+import { Otp } from "../../utils/otp";
+import { Email } from "../../utils/send-email.util";
+
+const { User } = models;
 
 export const ResendOtp: RequestHandler = async (req, res, next) => {
     const { email } = req.body;
@@ -19,19 +21,14 @@ export const ResendOtp: RequestHandler = async (req, res, next) => {
 
         user.otp = otp.code.toString();
         user.otp_expires = new Date(Date.now() + 5 * 60 * 1000);
-        await user.save()
+        await user.save();
 
-        await otpEmail(
-            user.first_name + " " + user.last_name,
-            Number(otp.code),
-            email,
-            "../emails/user_verification.html"
-        )
+        await Email(user, otp.code.toString(), email, "../emails/user_verification.html");
 
         return res.status(200).json({
             success: true,
             message: "An Otp has been sent to your email"
-        })
+        });
     } catch (err) {
         return next(err)
     }

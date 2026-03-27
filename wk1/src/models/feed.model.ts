@@ -18,6 +18,10 @@ Feed.init({
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true
     },
+    farmer_id: {
+        type: DataTypes.UUID,
+        allowNull: false,
+    },
     name: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -31,6 +35,19 @@ Feed.init({
         validate: {
             isAlphanumeric: true
         }
+    },
+    feed_type: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    larvea_count: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    status: {
+        type: DataTypes.ENUM('in-progress', 'completed'),
+        allowNull: false,
+        defaultValue: 'in-progress'
     }
 }, {
     sequelize: sequelized

@@ -11,6 +11,11 @@ export const dbConfig: DBConfig = {
     dialect: "mysql"
 };
 
+export const emailConfig = {
+    email: process.env.ADMIN_EMAIL,
+    pass: process.env.PASSWORD
+}
+
 if (!process.env.JWT_ACCESS_SECRET || !process.env.JWT_REFRESH_SECRET || !process.env.JWT_RESET_SECRET) {
   throw new Error("JWT secrets are not set in environment variables.");
 };

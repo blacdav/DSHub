@@ -18,6 +18,6 @@ router.post('/verify-otp', VerifyOtp);
 router.post('/forgotten-password', ForgottenPassword);
 router.post('/resend-otp', ResendOtp);
 router.post('/reset-password', ResetPassword);
-router.post('/me', CheckAuthUser, GetMe);
+router.get('/me', CheckAuthUser, GetMe);
 
 export default router;

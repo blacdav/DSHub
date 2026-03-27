@@ -1,8 +1,11 @@
-import bcrypt from "bcrypt"
-import User from "../../models/users.model.js";
-import { GenResetToken } from "../../utils/token.util.js";
+import { RequestHandler } from "express";
+import models from "../../models";
+import { verifyHash } from "../../utils/hash.util";
+import { GenResetToken } from "../../utils/token.util";
 
-export const VerifyOtp = async (req, res) => {
+const { User } = models;
+
+export const VerifyOtp: RequestHandler = async (req, res) => {
     const { email, otp, otp_type } = req.body;
 
     try {
@@ -42,7 +45,7 @@ export const VerifyOtp = async (req, res) => {
             });
         }
 
-        const verifyOtp = await bcrypt.compare(otp, profile.otp);
+        const verifyOtp = await verifyHash(otp, profile.otp!);
         if (!verifyOtp) {
             return res.status(400).json({
                 success: false,
